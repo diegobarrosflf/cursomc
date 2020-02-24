@@ -1,6 +1,6 @@
 package com.diegobarros.cursomc;
 
-import java.text.SimpleDateFormat;
+import java.text.SimpleDateFormat;import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import com.diegobarros.cursomc.domain.Cidade;
 import com.diegobarros.cursomc.domain.Cliente;
 import com.diegobarros.cursomc.domain.Endereco;
 import com.diegobarros.cursomc.domain.Estado;
+import com.diegobarros.cursomc.domain.ItemPedido;
 import com.diegobarros.cursomc.domain.Pagamento;
 import com.diegobarros.cursomc.domain.PagamentoComBoleto;
 import com.diegobarros.cursomc.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.diegobarros.cursomc.repositories.CidadeRepository;
 import com.diegobarros.cursomc.repositories.ClienteRepository;
 import com.diegobarros.cursomc.repositories.EnderecoRepository;
 import com.diegobarros.cursomc.repositories.EstadoRepository;
+import com.diegobarros.cursomc.repositories.ItemPedidoRepository;
 import com.diegobarros.cursomc.repositories.PagamentoRepository;
 import com.diegobarros.cursomc.repositories.PedidoRepository;
 import com.diegobarros.cursomc.repositories.ProdutoRepository;
@@ -33,21 +35,23 @@ import com.diegobarros.cursomc.repositories.ProdutoRepository;
 public class CursomcApplication implements CommandLineRunner{
 	
 	@Autowired
-	CategoriaRepository categoriaRepository;	
+	private CategoriaRepository categoriaRepository;	
 	@Autowired
-	ProdutoRepository produtoRepository;	
+	private ProdutoRepository produtoRepository;	
 	@Autowired
-	EstadoRepository estadoRepository;	
+	private EstadoRepository estadoRepository;	
 	@Autowired
-	CidadeRepository cidadeRepository;	
+	private CidadeRepository cidadeRepository;	
 	@Autowired
-	ClienteRepository clienteRepository;	
+	private ClienteRepository clienteRepository;	
 	@Autowired
-	EnderecoRepository enderecoRepository;
+	private EnderecoRepository enderecoRepository;
 	@Autowired
-	PedidoRepository pedidoRepository;
+	private PedidoRepository pedidoRepository;
 	@Autowired
-	PagamentoRepository pagamentoRepository;
+	private PagamentoRepository pagamentoRepository;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 
 	public static void main(String[] args) {
@@ -113,6 +117,19 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1,pagto2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1,ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1,ip2,ip3));
 		
 		
 		
